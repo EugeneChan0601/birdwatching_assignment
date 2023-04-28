@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel='stylesheet' href="/stylesheets/reviewPage.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+<div id="container">
+    <div class="head">
+        <div class="titles">
+            <h1>Bird Sighting</h1>
+            <h2>Crow</h2>
+        </div>
+        <div class="date-time">
+            Date/Time: 17:22 23th, April, 2023
+        </div>
+    </div>
+
+    <div class="image">
+
+    </div>
+
+    <div class="location">
+        <h1>location</h1>
+        <h2>Sheffield</h2>
+    </div>
+
+    <div class="chat">
+        <div class="messages-container">
+            <h1 id="Welcome"></h1>
+            <p id="status"></p>
+            <ul id="messages"></ul>
+        </div>
+        <form id="form" action="">
+            <input id="input" autocomplete="off" /><button>Send</button>
+        </form>
+    </div>
+
+    <div class="description">
+        <h1>description</h1>
+        <p>This crow, photographed on the hill next to Sheffield, is standing on a rock, black in colour, with a long beak, and by observation may be of some age.</p>
+    </div>
+</div>
+
+<script>
+    var socket = io();
+    var form = document.getElementById('form');
+    var input = document.getElementById('input');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+            socket.emit('chat message', input.value);
+            input.value = '';
+        }
+    });
+
+    socket.on('welcome',function(data){
+        document.getElementById('Welcome').innerHTML = data.description;
+
+    });
+
+    socket.on('chat message', function(msg) {
+        var item = document.createElement('li');
+        item.textContent = msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    socket.on('broadcast',function(data){
+        document.getElementById('status').innerHTML = data.description;
+    });
+
+</script>
+</body>
+</html>

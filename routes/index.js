@@ -10,4 +10,8 @@ router.get('/addPage', function (req, res) {
   res.render('addPage');
 });
 
+router.get('/reviewPage', function (req, res) {
+  res.render('reviewPage');
+});
+
 module.exports = router;
