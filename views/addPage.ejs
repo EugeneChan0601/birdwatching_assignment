@@ -9,26 +9,32 @@
 <body>
     <section class="container">
         <header>Add an Event</header>
-        <form action="" class="form">
+        <form method="post" action="/create" class="form">
             <div class="input-box">
                 <label>Nickname</label>
-                <input type="text" placeholder="Enter your nickname" required>
+                <input name="user" id="user" type="text" placeholder="Enter your nickname" required>
             </div>
 
             <div class="input-box">
                 <label>Description</label>
-                <textarea class="description" placeholder="Description" rows="4" cols="50" required></textarea>
+                <textarea name="identification" id="identification" class="description" placeholder="Description" rows="4" cols="50" required></textarea>
             </div>
 
             <div class="column">
                 <div class="input-box">
                     <label>Date</label>
-                    <input type="text" placeholder="YYYY-MM-DD">
+                    <input name="date" id="date" type="text" placeholder="YYYY-MM-DD">
                 </div>
 
                 <div class="input-box">
                     <label>Time</label>
-                    <input type="text" placeholder="hh:mm">
+                    <input name="time" id="time" type="text" placeholder="hh:mm">
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="input-box">
+                    <p><input type="submit" name="g" value="Submit" id="g"></p>
                 </div>
             </div>
         </form>
