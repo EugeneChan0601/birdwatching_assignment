@@ -108,6 +108,9 @@ main.table{
     overflow: overlay;
 }
 
+.table_body .detail-button {
+    width: 80px;
+}
 .table_body::-webkit-scrollbar{
     width: 0.5rem;
     height: 0.5rem;
@@ -136,7 +139,7 @@ td img {
     vertical-align: middle;
 }
 
-talbe,th,td{
+table,th,td{
     border-collapse: collapse;
     padding: 1rem;
     text-align: left;
@@ -173,6 +176,11 @@ tbody tr td img {
     transition: .2s ease-in-out;
 }
 
+tbody tr.hide td {
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 0;
+}
 tbody tr.hide td,
 tbody tr.hide td p {
     padding: 0;
@@ -180,11 +188,16 @@ tbody tr.hide td p {
     transition:  .2s ease-in-out .5s;
 }
 
+tbody tr.collapsed {
+    line-height: normal;
+}
+
 tbody tr.hide td img {
     width: 0;
     height: 0;
     transition: .2s ease-in-out .5s;
 }
+
 
 @media (max-width: 1000px){
     td:not(:first-of-type){

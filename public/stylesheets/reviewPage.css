@@ -9,7 +9,7 @@ body {
 }
 
 #container>div{
-    background-color: gray;
+    background-color: #fff;
     padding: 2%;
     color: whitesmoke;
 }
@@ -62,7 +62,7 @@ body {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    height: 300px;
+    height: 500px;
     grid-row-start: 3;
     grid-row-end: span 3;
     grid-column-start: 1;
@@ -70,18 +70,17 @@ body {
 }
 
 .description {
-    height: 300px;
+    height: 500px;
     grid-row-start: 3;
     grid-row-end: span 3;
     grid-column-start: 2;
     grid-column-end: 3;
-
 }
 
 .description p {
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
-    color: white;
+    color: black;
     line-height: 1.6;
     padding: 15px;
     text-align: justify;
@@ -130,7 +129,7 @@ body {
 }
 
 #messages > li:nth-child(odd) {
-    background: black;
+    background:  rgb(130, 106, 251);
 }
 
 /* 针对Webkit浏览器（如Chrome和Safari） */

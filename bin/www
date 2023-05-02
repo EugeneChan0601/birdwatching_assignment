@@ -109,9 +109,9 @@ io.on('connection', (socket) => {
     io.sockets.emit('broadcast',{description: clients + ' clients connected!'});
   });
 
-  socket.on('chat message', msg => {
-    io.emit('chat message', msg);
-    console.log('chat message', socket.id + msg);
+  socket.on('chat message', data => {
+    io.emit('chat message', data); // 保持数据对象的结构
+    console.log('chat message', socket.id + data.name + ': ' + data.message);
   });
 
 
