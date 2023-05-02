@@ -40,6 +40,19 @@ body {
 .form .input-box {
     width: 100%;
     margin-top: 20px;
+    position: relative; /* Add for putting location icon into input label */
+}
+
+/* Put the location icon in right of input area */
+.input-box img {
+    position: absolute;
+    right: 5px;
+    top: 70%;
+    transform: translateY(-50%);
+}
+
+.input-box img:hover {
+    cursor: pointer;
 }
 
 .input-box label {
@@ -52,7 +65,7 @@ body {
     width: 100%;
     outline: none;
     font-size: 1rem;
-    color: #707070;
+    /*color: #707070;*/
     margin-top: 8px;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -66,7 +79,7 @@ body {
     /*width: 100%;*/
     outline: none;
     font-size: 1rem;
-    color: #707070;
+    /*color: #707070;*/
     margin-top: 8px;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -81,4 +94,15 @@ body {
 .form .column {
     display: flex;
     column-gap: 15px;
+}
+
+input .location img{
+
+}
+
+
+@media screen and (max-width: 500px){
+    .form .column{
+        flex-wrap: wrap;
+    }
 }

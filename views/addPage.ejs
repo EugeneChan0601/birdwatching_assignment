@@ -34,9 +34,39 @@
 
             <div class="column">
                 <div class="input-box">
+                    <label>Location</label>
+                    <input class="location" id="location" type="text" placeholder="Click the icon to get your current location">
+                    <img src="/images/location.png" onclick="getLocation()">
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="input-box">
                     <p><input type="submit" name="g" value="Submit" id="g"></p>
                 </div>
             </div>
         </form>
     </section>
+
+    <script>
+        var x=document.getElementById("location");
+        function getLocation()
+        {
+            if (navigator.geolocation)
+            {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            }
+            else
+            {
+                x.innerHTML="This browser does not support the acquisition of geographic locations.";
+            }
+        }
+
+        function showPosition(position)
+        {
+            x.value="Latitude: " + position.coords.latitude +
+                ", Longitude: " + position.coords.longitude;
+        }
+    </script>
 </body>
+
