@@ -128,6 +128,7 @@ main.table{
 
 table{
     width: 100%;
+    min-width: 320px;
 }
 
 td img {
@@ -199,8 +200,54 @@ tbody tr.hide td img {
 }
 
 
-@media (max-width: 1000px){
-    td:not(:first-of-type){
-        min-width: 12.1rem;
+@media (max-width: 768px) {
+    .table_body {
+        position: relative;
+    }
+
+    /* ID column (first column) */
+    th:nth-child(1),
+    td:nth-child(1) {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background-color: whitesmoke;
+    }
+
+    /* Date/Time column (second column) */
+    th:nth-child(2),
+    td:nth-child(2) {
+        position: sticky;
+        left: 50px;
+        z-index: 1;
+        background-color: whitesmoke;
+    }
+
+    /* Fixed column shading */
+    th:nth-child(1),
+    td:nth-child(1),
+    th:nth-child(2),
+    td:nth-child(2) {
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* adjust the font size */
+    thead th,
+    tbody tr td {
+        font-size: 12px;
+    }
+
+    .table_header h1 {
+        font-size: 1.4rem; /* Reduce the size of headings */
+    }
+
+    .table_header button {
+        width: 20%; /* Increase button width */
+        height: 120%; /* Increase button height */
+        font-size: 1.2rem; /* Increase button font size */
+    }
+
+    main.table {
+        width: 90vw; /* Increase table width */
     }
 }
