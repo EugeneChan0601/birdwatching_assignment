@@ -96,6 +96,11 @@ body {
     column-gap: 15px;
 }
 
+.form .input-box input[type="file"] {
+    background-color: transparent;
+    border: none;
+}
+
 input .location img{
 
 }

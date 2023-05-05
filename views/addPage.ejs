@@ -8,7 +8,7 @@
 </head>
 <body>
     <section class="container">
-        <header>Add an Event</header>
+        <header>Add a Bird</header>
         <form method="post" action="/create" class="form">
             <div class="input-box">
                 <label>Nickname</label>
@@ -29,6 +29,13 @@
                 <div class="input-box">
                     <label>Time</label>
                     <input name="time" id="time" type="text" placeholder="hh:mm">
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="input-box">
+                    <label>Image</label>
+                    <input type="file" name="image" id="image" accept="image/*">
                 </div>
             </div>
 

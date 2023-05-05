@@ -4,7 +4,14 @@ let isUploader = null;
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.detail-button').forEach(function (button) {
         button.addEventListener('click', function () {
+
             name = prompt('Please enter your name：');
+            // If no name is entered, it will prompt that a name needs to be entered
+            if (name === null || name.trim() === '') {
+                alert('Please enter your name to continue');
+                return;
+            }
+
             isUploader = confirm('Are you the uploader of this bird?');
 
             if (isUploader) {
