@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel='stylesheet' href='/stylesheets/addPage.css' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="./public/javascripts/add.js"></script>
 </head>
 <body>
     <section class="container">
         <header>Add a Bird</header>
-        <form method="post" action="/create" class="form">
+        <form method="post" action="/create" class="form" enctype="multipart/form-data">
+            <div>
+                <label for="myImage">Choose an image</label>
+                <input type="file" id="myImage" name="myImg" accept="image/*" required>
+            </div>
+
             <div class="input-box">
                 <label>Nickname</label>
                 <input name="user" id="user" type="text" placeholder="Enter your nickname" required>
@@ -32,20 +39,22 @@
                 </div>
             </div>
 
-            <div class="column">
-                <div class="input-box">
-                    <label>Image</label>
-                    <input type="file" name="image" id="image" accept="image/*">
-                </div>
-            </div>
+<!--            <div class="column">-->
+<!--                <div class="input-box">-->
+<!--                    <label>Image</label>-->
+<!--                    <input type="file" name="image" id="image" accept="image/*">-->
+<!--                </div>-->
+<!--            </div>-->
+
 
             <div class="column">
                 <div class="input-box">
                     <label>Location</label>
-                    <input class="location" id="location" type="text" placeholder="Click the icon to get your current location">
+                    <input class="location" name="location" id="location" type="text" placeholder="Click the icon to get your current location">
                     <img src="/images/location.png" onclick="getLocation()">
                 </div>
             </div>
+
 
             <div class="column">
                 <div class="input-box">

@@ -9,9 +9,11 @@ exports.create = function (req, res) {
     var sighting = new Sighting({
         id: 1,
         date: userData.date+userData.time,
-        identification: userData.identification,
-        location: 'Sheffield',
+        identification: 'unknown',
+        location: userData.location,
         user: userData.user,
+        description: userData.identification,
+        img: req.file.path
     });
 
     sighting.save(function (err, results) {
@@ -22,7 +24,18 @@ exports.create = function (req, res) {
     });
 };
 
+exports.queryAll = function(req, res) {
+    Sighting.find({}, function (error, data) {
+        if(error){
+            res.status(500).send('query data failed!');
+        }
 
+        console.log("query data success");
+        console.log(data);
+        res.render('listPage', { title: 'Express', Data: data});
+
+    });
+};
 
 
 
