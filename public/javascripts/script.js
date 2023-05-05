@@ -6,33 +6,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     search.addEventListener('input', searchTable);
 
+    // console.log(search)
+
 function searchTable(){
 
-    let visibleRowCount = 0;
-
+        // console.log(table_rows)
 
     table_rows.forEach((row, i) => {
         let table_data = row.textContent.toLowerCase(),
             search_data = search.value.toLowerCase();
 
-        if (table_data.indexOf(search_data) < 0) {
-            row.classList.add('hide');
-            row.style.display = 'none';
-        } else {
-            row.classList.remove('hide');
-            row.style.display = 'table-row';
-        }
-
+        row.classList.toggle('hide',table_data.indexOf(search_data) < 0);
         row.style.setProperty('--delay', i / 25 + 's');
         // console.log(row.textContent);
-    });
-
-    document.querySelectorAll('tbody tr:not(.hide)').forEach((visible_row, i) => {
-        visible_row.classList.add('collapsed');
-    });
-
-    document.querySelectorAll('tbody tr.hide').forEach((hidden_row) => {
-        hidden_row.classList.remove('collapsed');
     });
 
     document.querySelectorAll('tbody tr:not(.hide)').forEach((visible_row, i) => {

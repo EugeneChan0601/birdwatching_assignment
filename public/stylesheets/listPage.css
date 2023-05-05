@@ -163,8 +163,13 @@ tbody tr {
 }
 
 tbody tr.hide {
+    height: 0;
     opacity: 0;
     transform: translateX(100%);
+}
+
+tbody tr.hide button{
+    display: none;
 }
 
 tbody tr:hover{
@@ -177,11 +182,11 @@ tbody tr td img {
     transition: .2s ease-in-out;
 }
 
-tbody tr.hide td {
-    padding-top: 0;
-    padding-bottom: 0;
-    line-height: 0;
-}
+/*tbody tr.hide td {*/
+/*    padding-top: 0;*/
+/*    padding-bottom: 0;*/
+/*    line-height: 0;*/
+/*}*/
 tbody tr.hide td,
 tbody tr.hide td p {
     padding: 0;
@@ -189,9 +194,9 @@ tbody tr.hide td p {
     transition:  .2s ease-in-out .5s;
 }
 
-tbody tr.collapsed {
-    line-height: normal;
-}
+/*tbody tr.collapsed {*/
+/*    line-height: normal;*/
+/*}*/
 
 tbody tr.hide td img {
     width: 0;
