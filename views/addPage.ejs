@@ -51,7 +51,7 @@
                 <div class="input-box">
                     <label>Location</label>
                     <input class="location" name="location" id="location" type="text" placeholder="Click the icon to get your current location">
-                    <img src="/images/location.png" onclick="getLocation()">
+                    <img class="location-icon" src="/images/location.png" onclick="getLocation()">
                 </div>
             </div>
 
@@ -65,6 +65,14 @@
     </section>
 
     <script>
+        var x=document.getElementById("location");
+        let searchIcon = document.querySelector('.location-icon');
+        let searchInput = document.querySelector('.location');
+
+        searchIcon.addEventListener('click', () => {
+            searchInput.value = 'Locating...';
+        });
+
         var x=document.getElementById("location");
         function getLocation()
         {

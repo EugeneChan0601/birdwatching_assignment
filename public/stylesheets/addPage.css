@@ -101,6 +101,11 @@ body {
     border: none;
 }
 
+#g {
+    background-color: green;
+    color: white;
+}
+
 input .location img{
 
 }

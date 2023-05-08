@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="/javascripts/jump.js"></script>
+    <script async
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD67e55wmYhnHd9bA02_Xt1D0ibG6BKmv4&callback=initMap">
+    </script>
 
 </head>
 <body>
@@ -28,7 +31,7 @@
 
     <div class="location">
         <h1 style="color: #333333">location</h1>
-        <h2 style="color: #333333">Sheffield</h2>
+        <div id="map"></div>
     </div>
 
     <div class="chat">
@@ -88,5 +91,25 @@
         });
     }
 </script>
+
+<script>
+    function initMap() {
+        let myLatLng = {lat: 53.3744545, lng: -1.4858933};
+
+        let map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 16,
+            center: myLatLng
+        });
+
+        let marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'My Location'
+        });
+    }
+    google.maps.event.addDomListener(window, 'load', initMap);
+
+</script>
+
 </body>
 </html>
