@@ -18,19 +18,20 @@
     <div class="head">
         <div class="titles">
             <h1 style="color: #333333">Bird Sighting</h1>
-            <h2 style="color: #333333">Crow</h2>
+            <h2 style="color: #333333"><%= Data.identification %></h2>
         </div>
         <div class="date-time" style="color: #333333">
-            Date/Time: 17:22 23th, April, 2023
+            <%= Data.date %>
         </div>
     </div>
 
     <div class="image">
-
+    <img src = <%= "../" + Data.img.replace('public\\', '')%>
+         width="500" height="300" >
     </div>
 
     <div class="location">
-        <h1 style="color: #333333">location</h1>
+        <h1 style="color: #333333"> <%= Data.location%>> </h1>
         <div id="map"></div>
     </div>
 
@@ -49,7 +50,7 @@
 
     <div class="description">
         <h1 style="color: #333333">description</h1>
-        <p>This crow, photographed on the hill next to Sheffield, is standing on a rock, black in colour, with a long beak, and by observation may be of some age.</p>
+        <p> <%= Data.description%></p>
     </div>
 </div>
 

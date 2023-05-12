@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.detail-button').forEach(function (button) {
         button.addEventListener('click', function () {
 
+
+            //var ID = button.closest('tr').rowIndex;
+
             name = prompt('Please enter your name：');
             // If no name is entered, it will prompt that a name needs to be entered
             if (name === null || name.trim() === '') {

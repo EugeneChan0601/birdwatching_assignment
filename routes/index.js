@@ -26,6 +26,7 @@ var upload = multer({ storage: storage });
 /* GET home page. */
 router.get('/', function(req, res, next) {
   //res.render('listPage', { title: 'Express' });
+  //sighting.querySighting();
   sighting.queryAll(req, res);
 });
 
@@ -34,7 +35,8 @@ router.get('/addPage', function (req, res) {
 });
 
 router.get('/reviewPage', function (req, res) {
-  res.render('reviewPage');
+  //res.render('reviewPage');
+  sighting.querySighting(req, res);
 });
 
 router.post('/create', upload.single('myImg'), function (req, res){

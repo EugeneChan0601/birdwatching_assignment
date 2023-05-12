@@ -10,7 +10,8 @@ var SightingSchema = new Schema(
         location: {type: String, required: true, max: 100},
         user: {type: String, required:true, max: 100},
         description: {type: String, required: true, max: 100},
-        img: {type: String}
+        img: {type: String},
+        password: {type: String}
     }
 );
 

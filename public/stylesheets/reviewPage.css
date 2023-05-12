@@ -38,7 +38,6 @@ body {
     grid-column-start: 1;
     grid-column-end: 1;
     overflow: hidden;
-    background-image: url('../images/crow1.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
