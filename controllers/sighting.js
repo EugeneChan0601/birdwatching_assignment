@@ -9,7 +9,7 @@ exports.create = function (req, res) {
     var pwd = genPassword();
     var sighting = new Sighting({
         id: 1,
-        date: userData.date+userData.time,
+        date: userData.date+" "+userData.time,
         identification: 'unknown',
         location: userData.location,
         user: userData.user,
@@ -21,7 +21,7 @@ exports.create = function (req, res) {
     sighting.save(function (err, results) {
         if (err)
             res.status(500).send('Invalid data!');
-        console.log("Sigting saved!    "+sighting)
+        console.log("Sighting saved!    "+sighting)
         //res.json({sighting: sighting});
         console.log("Sighting saved successful, your password is " + pwd);
         res.json({password: pwd});
@@ -42,6 +42,23 @@ exports.queryAll = function(req, res) {
 
 exports.pwdValidation = function (inputID, inputPwd){
 
+}
+
+exports.updateSighting = function (req,res) {
+    var conditions = {"id" : req.body.id}
+    var updates = {$set:{
+        "date": req.body.date,
+        "identification": req.body.identification,
+        "location": req.body.location,
+        "description": req.body.description,
+    }}
+    Sighting.updateOne(conditions,updates,function (error) {
+        if(error) {
+            console.log(error)
+        } else {
+            console.log("Sighting edited.")
+        }
+    })
 }
 
 exports.querySighting = function (req, res) {
@@ -66,7 +83,6 @@ exports.querySighting = function (req, res) {
 function genPassword(){
     return Math.floor(Math.random() * 1000000).toString().padStart(6, '0').toString();
 }
-
 
 
 
