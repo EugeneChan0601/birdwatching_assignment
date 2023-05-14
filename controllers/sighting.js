@@ -63,7 +63,7 @@ exports.updateSighting = function (req,res) {
 
 exports.querySighting = function (req, res) {
     //var sightID = req.id;
-    var sightID = 1;
+    var sightID = Number(req.body.index);
     Sighting.findOne({"id" : sightID}, {"date": 1, "identification": 1, "location": 1,
                                         "description": 1, "img": 1},
                                         function (error, result) {
@@ -72,7 +72,7 @@ exports.querySighting = function (req, res) {
                                             }
                                             else{
                                                 console.log("query sighting success");
-                                                //console.log(result);
+                                                console.log(result);
                                                 res.render("reviewPage", {Data: result})
                                             }
     });

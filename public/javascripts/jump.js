@@ -4,7 +4,37 @@ let isUploader = null;
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.detail-button').forEach(function (button) {
         button.addEventListener('click', function () {
-            window.location.href = '/reviewPage';
+
+            var ID = button.closest('tr').rowIndex;
+
+            // var httpRequest = new XMLHttpRequest();
+            // httpRequest.open('POST', '/reviewPage', true);
+            // httpRequest.setRequestHeader("Content-type","application/json");
+            // httpRequest.send(JSON.stringify(IdObject));
+
+
+            var form = document.createElement("form");
+            form.method = "post";
+            form.action = "/reviewPage";
+            document.body.appendChild(form);
+
+            var input = document.createElement("input");
+            input.type = "text";
+            input.name = "index";
+            input.value = ID.toString();
+
+            form.appendChild(input);
+
+            form.submit();
+
+            document.body.removeChild(form);
+
+
+
+
+
+
+            //window.location.href = '/reviewPage';
 
             // //var ID = button.closest('tr').rowIndex;
             // name = prompt('Please enter your name：');

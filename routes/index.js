@@ -34,8 +34,8 @@ router.get('/addPage', function (req, res) {
   res.render('addPage');
 });
 
-router.get('/reviewPage', function (req, res) {
-  //res.render('reviewPage');
+router.post('/reviewPage', function (req, res) {
+  console.log(req.body);
   sighting.querySighting(req, res);
 });
 
@@ -43,4 +43,7 @@ router.post('/create', upload.single('myImg'), function (req, res){
   sighting.create(req,res);
 
 })
+
+
+
 module.exports = router;
