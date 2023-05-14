@@ -75,8 +75,6 @@ exports.querySighting = function (req, res) {
                                                 //console.log(result);
                                                 res.render("reviewPage", {Data: result})
                                             }
-
-
     });
 }
 

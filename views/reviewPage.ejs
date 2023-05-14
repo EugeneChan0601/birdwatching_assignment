@@ -7,7 +7,7 @@
     <link rel='stylesheet' href="/stylesheets/reviewPage.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <script src="/javascripts/jump.js"></script>
+    <script src="/javascripts/info.js"></script>
     <script async
             src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
     </script>
@@ -19,6 +19,11 @@
         <div class="titles">
             <h1 style="color: #333333">Bird Sighting</h1>
             <h2 style="color: #333333"><%= Data.identification %></h2>
+            <div class="change-container">
+                <label id="change-label" style="color:#333333;">Type:</label>
+                <input id="type-name">
+                <button class="change-button">Change</button>
+            </div>
         </div>
         <div class="date-time" style="color: #333333">
             <%= Data.date %>
@@ -48,6 +53,27 @@
         </form>
     </div>
 
+    <div class="info">
+        <div class="info-container">
+            <h1 style="color:#333333;">Please enter your name to start chat</h1>
+        </div>
+        <div class="chat-info-container">
+            <div class="input-container">
+                <label id="name-label" style="color:#333333;">Name:</label>
+                <input id="name">
+            </div>
+            <h6 style="color: #333333;">If you are uploader, you can enter password, or just ignore that.</h6>
+            <div class="input-container">
+                <label id="pwd-label" style="color: #333333;">Password:</label>
+                <input id="password">
+            </div>
+
+            <div class="button-container">
+                <button class="confirm-button">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <div class="description">
         <h1 style="color: #333333">description</h1>
         <p> <%= Data.description%></p>
@@ -60,7 +86,6 @@
 
     function setupSocketIO() {
         let name = localStorage.getItem('username');
-        let isUploader = localStorage.getItem('isUploader') === 'true';
 
         var socket = io();
         var form = document.getElementById('form');
