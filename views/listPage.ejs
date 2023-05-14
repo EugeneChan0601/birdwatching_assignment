@@ -11,26 +11,12 @@
 </head>
 <body>
     <main class="table">
-        <section class="table_header">
-            <h1>Bird Sighting</h1>
-            <button id="myButton" onclick="location.href='/addPage'">Add</button>
-            <div class="input-group">
-                <input type="search" placeholder="Search Data...">
-                <img src="/images/search.png" alt="">
-            </div>
-        </section>
+        <% include ../public/views/listPage_header.ejs %>
         <section class="table_body">
             <table class="birdTable">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Date/Time</th>
-                    <th>Location</th>
-                    <th>Identification</th>
-                    <th>User</th>
-                    <th>Detail</th>
-                </tr>
-                </thead>
+
+                <% include ../public/views/table_header.ejs %>
+
                 <tbody>
                 <%
                 if(Data.length!=0){

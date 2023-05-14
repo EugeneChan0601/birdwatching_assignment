@@ -37,6 +37,18 @@ body {
     margin-top: 30px;
 }
 
+.container button .btn_area{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+#btn_pwd{
+    margin-left: 45%;
+    width: 10%;
+    height: auto;
+}
+
 .form .input-box {
     width: 100%;
     margin-top: 20px;

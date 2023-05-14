@@ -6,12 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel='stylesheet' href='/stylesheets/addPage.css' />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="./public/javascripts/add.js"></script>
 </head>
 <body>
-    <section class="container">
+    <div class="container" id="addPage" style="display: block">
         <header>Add a Bird</header>
-        <form method="post" action="/create" class="form" enctype="multipart/form-data">
+        <form method="post" action="/create" class="form" enctype="multipart/form-data" onsubmit="submitForm(event)">
             <div>
                 <label for="myImage">Choose an image</label>
                 <input type="file" id="myImage" name="myImg" accept="image/*" required>
@@ -30,27 +29,19 @@
             <div class="column">
                 <div class="input-box">
                     <label>Date</label>
-                    <input name="date" id="date" type="text" placeholder="YYYY-MM-DD">
+                    <input name="date" id="date" type="text" placeholder="YYYY-MM-DD" required>
                 </div>
 
                 <div class="input-box">
                     <label>Time</label>
-                    <input name="time" id="time" type="text" placeholder="hh:mm">
+                    <input name="time" id="time" type="text" placeholder="hh:mm" required>
                 </div>
             </div>
-
-<!--            <div class="column">-->
-<!--                <div class="input-box">-->
-<!--                    <label>Image</label>-->
-<!--                    <input type="file" name="image" id="image" accept="image/*">-->
-<!--                </div>-->
-<!--            </div>-->
-
 
             <div class="column">
                 <div class="input-box">
                     <label>Location</label>
-                    <input class="location" name="location" id="location" type="text" placeholder="Click the icon to get your current location">
+                    <input class="location" name="location" id="location" type="text" placeholder="Click the icon to get your current location" required>
                     <img class="location-icon" src="/images/location.png" onclick="getLocation()">
                 </div>
             </div>
@@ -62,7 +53,16 @@
                 </div>
             </div>
         </form>
-    </section>
+    </div>
+
+    <div id="password" class="container" style="display:none;">
+        <div class="pwd_content">
+            <p><b>Improtant!</b><br>Your password: <b style="color: red">12341234</b></p>
+        </div>
+        <div class="btn_area">
+            <button id="btn_pwd" onclick="location.href='/'">Exit</button>
+        </div>
+    </div>
 
     <script>
         var x=document.getElementById("location");
@@ -92,5 +92,44 @@
                 ", Longitude: " + position.coords.longitude;
         }
     </script>
+    <script>
+        function switchContent(contentId) {
+            const contentPanes = document.getElementsByClassName("container");
+            for (let i = 0; i < contentPanes.length; i++) {
+                contentPanes[i].style.display = "none";
+            }
+
+            document.getElementById(contentId).style.display = "block";
+
+        }
+    </script>
+    <script>
+        function submitForm(event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+
+            // 验证表单是否填写完整
+            const userField = document.getElementById('user');
+            const identificationField = document.getElementById('identification');
+            const locationField = document.getElementById('location');
+            if (!userField.checkValidity() || !identificationField.checkValidity() || !locationField.checkValidity()) {
+                alert('All detail required!');
+                return;
+            }
+
+            // 异步请求将表单数据发送到服务器
+            $.ajax({
+                url: '/create',
+                type: 'post',
+                data: new FormData($('form')[0]),
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // 在表格中显示感谢提交表单的信息
+                    switchContent('password');
+                }
+            });
+        }
+    </script>
+
 </body>
 

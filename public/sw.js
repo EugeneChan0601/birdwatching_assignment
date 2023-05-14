@@ -13,7 +13,8 @@ self.addEventListener('install', event => {
                 '/',
                 '/stylesheets/style.css',
                 '/stylesheets/listPage.css',
-                '/views/listPage.ejs'
+                '/views/listPage_header.ejs',
+                '/views/table_header.ejs'
                 // '/partials/header.ejs',
                 // '/partials/footer.ejs'
             ]);
