@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require("body-parser");
+const manifest = require('manifest.json');
 
 var sighting = require('../controllers/sighting');
 
@@ -10,7 +11,7 @@ var multer = require('multer');
 // storage defines the storage options to be used for file upload with multer
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/uploads/');
+    cb(null, '../public/uploads/');
   },
   filename: function (req, file, cb) {
     var original = file.originalname;
