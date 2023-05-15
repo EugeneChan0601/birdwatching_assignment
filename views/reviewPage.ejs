@@ -20,14 +20,17 @@
         <div class="titles">
             <h1 style="color: #333333">Bird Sighting</h1>
             <h2 style="color: #333333"><%= Data.identification %></h2>
+            <div class="date-time" style="color: #333333">
+                <%= Data.date %>
+            </div>
             <div class="change-container">
                 <label id="change-label" style="color:#333333;">Type:</label>
                 <input id="type-name">
                 <button class="change-button" onclick="updateIdentification()">Change</button>
             </div>
         </div>
-        <div class="date-time" style="color: #333333">
-            <%= Data.date %>
+        <div class="exit_link">
+            <button class="exit_btn" onclick="location.href='/'">Exit</button>
         </div>
     </div>
 
@@ -81,6 +84,7 @@
         <h1 style="color: #333333">description</h1>
         <p> <%= Data.description%></p>
     </div>
+
 </div>
 
 <script>

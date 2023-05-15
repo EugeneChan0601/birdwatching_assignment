@@ -26,6 +26,21 @@ body {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
+.container a{
+    text-decoration: none;
+    color: black;
+}
+
+.container a:hover{
+    text-decoration: underline;
+    color: red;
+}
+
+.container a img{
+    width: 1.2rem;
+    height: auto;
+}
+
 .container header {
     font-size: 1.5rem;
     color: #333;

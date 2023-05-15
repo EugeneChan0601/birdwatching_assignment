@@ -14,7 +14,9 @@ self.addEventListener('install', event => {
                 '/stylesheets/style.css',
                 '/stylesheets/listPage.css',
                 '/views/listPage_header.ejs',
-                '/views/table_header.ejs'
+                '/views/table_header.ejs',
+                '/images/search.png',
+                '/images/birdbg.jpeg'
                 // '/partials/header.ejs',
                 // '/partials/footer.ejs'
             ]);

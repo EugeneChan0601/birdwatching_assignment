@@ -1,0 +1,246 @@
+Index: routes/index.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>var express = require('express');\nvar router = express.Router();\nvar bodyParser = require(\"body-parser\");\nconst manifest = require('manifest.json');\n\nvar sighting = require('../controllers/sighting');\n\n\nvar multer = require('multer');\n\n// storage defines the storage options to be used for file upload with multer\nvar storage = multer.diskStorage({\n  destination: function (req, file, cb) {\n    cb(null, 'public/uploads/');\n  },\n  filename: function (req, file, cb) {\n    var original = file.originalname;\n    var file_extension = original.split(\".\");\n    // Make the file name the date + the file extension\n    filename =  Date.now() + '.' + file_extension[file_extension.length-1];\n    cb(null, filename);\n  }\n});\nvar upload = multer({ storage: storage });\n\n\n/* GET home page. */\nrouter.get('/', function(req, res, next) {\n  //res.render('listPage', { title: 'Express' });\n  //sighting.querySighting();\n  sighting.queryAll(req, res);\n});\n\nrouter.get('/addPage', function (req, res) {\n  res.render('addPage');\n});\n\nrouter.post('/reviewPage', function (req, res) {\n  console.log(req.body);\n  sighting.querySighting(req, res);\n});\n\nrouter.post('/create', upload.single('myImg'), function (req, res){\n  sighting.create(req,res);\n\n})\n\n\n\nmodule.exports = router;\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/routes/index.js b/routes/index.js
+--- a/routes/index.js	(revision 4fd5d5dea04a351c052f83f9012f668759b28435)
++++ b/routes/index.js	(date 1684162900352)
+@@ -11,7 +11,7 @@
+ // storage defines the storage options to be used for file upload with multer
+ var storage = multer.diskStorage({
+   destination: function (req, file, cb) {
+-    cb(null, 'public/uploads/');
++    cb(null, '../public/uploads/');
+   },
+   filename: function (req, file, cb) {
+     var original = file.originalname;
+Index: public/sw.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>const CACHE_NAME = 'bird sighting app v1';\n\n\n// Use the install event to pre-cache all initial resources.\nself.addEventListener('install', event => {\n    console.log('Service Worker: Installing....');\n    event.waitUntil((async () => {\n\n        console.log('Service Worker: Caching App Shell at the moment......');\n        try {\n            const cache = await caches.open(CACHE_NAME);\n            cache.addAll([\n                '/',\n                '/stylesheets/style.css',\n                '/stylesheets/listPage.css',\n                '/views/listPage_header.ejs',\n                '/views/table_header.ejs'\n                // '/partials/header.ejs',\n                // '/partials/footer.ejs'\n            ]);\n        }\n        catch{\n            console.log(\"error occured while caching...\")\n        }\n\n    })());\n});\n\n//clear cache on reload\nself.addEventListener('activate', event => {\n// Remove old caches\n    event.waitUntil(\n        (async () => {\n            const keys = await caches.keys();\n            return keys.map(async (cache) => {\n                if(cache !== cacheName) {\n                    console.log('Service Worker: Removing old cache: '+cache);\n                    return await caches.delete(cache);\n                }\n            })\n        })()\n    )\n})\n\nself.addEventListener('fetch', function(event) {\n\n    console.log('Service Worker: Fetch', event.request.url);\n\n    console.log(\"Url\", event.request.url);\n\n    event.respondWith(\n        caches.match(event.request).then(function(response) {\n            return response || fetch(event.request);\n        })\n    );\n});
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/public/sw.js b/public/sw.js
+--- a/public/sw.js	(revision 4fd5d5dea04a351c052f83f9012f668759b28435)
++++ b/public/sw.js	(date 1684178520399)
+@@ -14,7 +14,9 @@
+                 '/stylesheets/style.css',
+                 '/stylesheets/listPage.css',
+                 '/views/listPage_header.ejs',
+-                '/views/table_header.ejs'
++                '/views/table_header.ejs',
++                '/images/search.png',
++                '/images/birdbg.jpeg'
+                 // '/partials/header.ejs',
+                 // '/partials/footer.ejs'
+             ]);
+Index: views/addPage.ejs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html>\n<head>\n    <title>addPage</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <link rel='stylesheet' href='/stylesheets/addPage.css' />\n    <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js\"></script>\n    <script src=\"/javascripts/indexDB.js\"></script>\n</head>\n<body>\n    <div class=\"container\" id=\"addPage\" style=\"display: block\">\n        <header>Add a Bird</header>\n        <form method=\"post\" action=\"/create\" class=\"form\" enctype=\"multipart/form-data\" onsubmit=\"submitForm(event)\">\n            <div>\n                <label for=\"myImage\">Choose an image</label>\n                <input type=\"file\" id=\"myImage\" name=\"myImg\" accept=\"image/*\" required>\n            </div>\n\n            <div class=\"input-box\">\n                <label>Nickname</label>\n                <input name=\"user\" id=\"user\" type=\"text\" placeholder=\"Enter your nickname\" required>\n            </div>\n\n            <div class=\"input-box\">\n                <label>Description</label>\n                <textarea name=\"identification\" id=\"identification\" class=\"description\" placeholder=\"Description\" rows=\"4\" cols=\"50\" required></textarea>\n            </div>\n\n            <div class=\"column\">\n                <div class=\"input-box\">\n                    <label>Date</label>\n                    <input name=\"date\" id=\"date\" type=\"text\" placeholder=\"YYYY-MM-DD\" required>\n                </div>\n\n                <div class=\"input-box\">\n                    <label>Time</label>\n                    <input name=\"time\" id=\"time\" type=\"text\" placeholder=\"hh:mm\" required>\n                </div>\n            </div>\n\n            <div class=\"column\">\n                <div class=\"input-box\">\n                    <label>Location</label>\n                    <input class=\"location\" name=\"location\" id=\"location\" type=\"text\" placeholder=\"Click the icon to get your current location\" required>\n                    <img class=\"location-icon\" src=\"/images/location.png\" onclick=\"getLocation()\">\n                </div>\n            </div>\n\n\n            <div class=\"column\">\n                <div class=\"input-box\">\n                    <p><input type=\"submit\" name=\"g\" value=\"Submit\" id=\"g\"></p>\n                </div>\n            </div>\n        </form>\n    </div>\n\n    <div id=\"password\" class=\"container\" style=\"display:none;\">\n        <div class=\"pwd_content\">\n            <p><b>Improtant!</b><br>Your password: <b style=\"color: red\">12341234</b></p>\n        </div>\n        <div class=\"btn_area\">\n            <button id=\"btn_pwd\" onclick=\"location.href='/'\">Exit</button>\n        </div>\n    </div>\n\n    <script>\n        var x=document.getElementById(\"location\");\n        let searchIcon = document.querySelector('.location-icon');\n        let searchInput = document.querySelector('.location');\n\n        searchIcon.addEventListener('click', () => {\n            searchInput.value = 'Locating...';\n        });\n\n        var x=document.getElementById(\"location\");\n        function getLocation()\n        {\n            if (navigator.geolocation)\n            {\n                navigator.geolocation.getCurrentPosition(showPosition);\n            }\n            else\n            {\n                x.innerHTML=\"This browser does not support the acquisition of geographic locations.\";\n            }\n        }\n\n        function showPosition(position)\n        {\n            x.value=\"Latitude: \" + position.coords.latitude +\n                \", Longitude: \" + position.coords.longitude;\n        }\n    </script>\n    <script>\n        function switchContent(contentId) {\n            const contentPanes = document.getElementsByClassName(\"container\");\n            for (let i = 0; i < contentPanes.length; i++) {\n                contentPanes[i].style.display = \"none\";\n            }\n\n            document.getElementById(contentId).style.display = \"block\";\n\n        }\n    </script>\n    <script>\n        function submitForm(event) {\n            event.preventDefault(); // 阻止表单默认提交行为\n\n            // 验证表单是否填写完整\n            const userField = document.getElementById('user');\n            const identificationField = document.getElementById('identification');\n            const locationField = document.getElementById('location');\n            if (!userField.checkValidity() || !identificationField.checkValidity() || !locationField.checkValidity()) {\n                alert('All detail required!');\n                return;\n            }\n\n            // 异步请求将表单数据发送到服务器\n            $.ajax({\n                url: '/create',\n                type: 'post',\n                data: new FormData($('form')[0]),\n                processData: false,\n                contentType: false,\n                success: function(response) {\n                    // 在表格中显示感谢提交表单的信息*\n                    switchContent('password');\n                    // indexDB 调用示例\n                    var inputData = {\"date\":this.data.get(\"date\")+\" \"+this.data.get(\"time\"),\"identification\":this.data.get(\"identification\"),\n                        \"location\":this.data.get(\"location\"), \"user\":this.data.get(\"user\"),\"description\":this.data.get(\"description\"),\n                        \"img\":this.data.get(\"myImg\"),\"password\":response.password}\n                    addData(\"sighting\",inputData)\n                }\n            });\n        }\n    </script>\n\n</body>\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/views/addPage.ejs b/views/addPage.ejs
+--- a/views/addPage.ejs	(revision 4fd5d5dea04a351c052f83f9012f668759b28435)
++++ b/views/addPage.ejs	(date 1684181251023)
+@@ -10,6 +10,7 @@
+ </head>
+ <body>
+     <div class="container" id="addPage" style="display: block">
++        <a href="/" class="rtn"><img src="/images/return.png"> Return</a>
+         <header>Add a Bird</header>
+         <form method="post" action="/create" class="form" enctype="multipart/form-data" onsubmit="submitForm(event)">
+             <div>
+Index: views/reviewPage.ejs
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html>\n<head>\n    <title>reviewPage</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel='stylesheet' href='/stylesheets/style.css' />\n    <link rel='stylesheet' href=\"/stylesheets/reviewPage.css\">\n    <link href=\"https://fonts.googleapis.com/css2?family=Roboto&display=swap\" rel=\"stylesheet\">\n    <script src=\"https://cdn.socket.io/4.5.4/socket.io.min.js\"></script>\n    <script src=\"/javascripts/info.js\"></script>\n    <script async\n            src=\"https://maps.googleapis.com/maps/api/js?key=&callback=initMap\">\n    </script>\n\n</head>\n<body>\n<div id=\"container\">\n    <div class=\"head\">\n        <div class=\"titles\">\n            <h1 style=\"color: #333333\">Bird Sighting</h1>\n            <h2 style=\"color: #333333\"><%= Data.identification %></h2>\n            <div class=\"change-container\">\n                <label id=\"change-label\" style=\"color:#333333;\">Type:</label>\n                <input id=\"type-name\">\n                <button class=\"change-button\">Change</button>\n            </div>\n        </div>\n        <div class=\"date-time\" style=\"color: #333333\">\n            <%= Data.date %>\n        </div>\n    </div>\n\n    <div class=\"image\">\n    <img src = <%= \"../\" + Data.img.replace('public\\\\', '')%>\n         width=\"500\" height=\"300\" >\n    </div>\n\n    <div class=\"location\">\n        <h1 style=\"color: #333333\"> <%= Data.location%>> </h1>\n        <div id=\"map\"></div>\n    </div>\n\n    <div class=\"chat\">\n        <div class=\"messages-container\">\n            <h1 id=\"Welcome\" style=\"color: #333333\"></h1>\n            <p id=\"status\" style=\"color: #333333\"></p>\n            <ul id=\"messages\" style=\"color: #333333\"></ul>\n        </div>\n        <div class=\"history\" class=\"boxed\"></div>\n        <form id=\"form\" action=\"\">\n            <input id=\"input\" autocomplete=\"off\" />\n            <button>Send</button>\n        </form>\n    </div>\n\n    <div class=\"info\">\n        <div class=\"info-container\">\n            <h1 style=\"color:#333333;\">Please enter your name to start chat</h1>\n        </div>\n        <div class=\"chat-info-container\">\n            <div class=\"input-container\">\n                <label id=\"name-label\" style=\"color:#333333;\">Name:</label>\n                <input id=\"name\">\n            </div>\n            <h6 style=\"color: #333333;\">If you are uploader, you can enter password, or just ignore that.</h6>\n            <div class=\"input-container\">\n                <label id=\"pwd-label\" style=\"color: #333333;\">Password:</label>\n                <input id=\"password\">\n            </div>\n\n            <div class=\"button-container\">\n                <button class=\"confirm-button\">Confirm</button>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"description\">\n        <h1 style=\"color: #333333\">description</h1>\n        <p> <%= Data.description%></p>\n    </div>\n</div>\n\n<script>\n\n    setupSocketIO();\n\n    function setupSocketIO() {\n        let name = localStorage.getItem('username');\n\n        var socket = io();\n        var form = document.getElementById('form');\n        var input = document.getElementById('input');\n\n        form.addEventListener('submit', function(e) {\n            e.preventDefault();\n            if (input.value) {\n                socket.emit('chat message', { name: name, message: input.value });\n                input.value = '';\n            }\n        });\n\n        socket.on('welcome',function(data){\n            document.getElementById('Welcome').innerHTML = data.description;\n\n        });\n\n        socket.on('chat message', function(data) {\n            var item = document.createElement('li');\n            // Change to logic based on the username of the message sender\n            item.textContent = (data.name === name ? 'Me' : data.name) + ': ' + data.message;\n            messages.appendChild(item);\n            window.scrollTo(0, document.body.scrollHeight);\n        });\n\n        socket.on('broadcast',function(data){\n            document.getElementById('status').innerHTML = data.description;\n        });\n    }\n</script>\n\n<script>\n    function initMap() {\n        let myLatLng = {lat: 53.3744545, lng: -1.4858933};\n\n        let map = new google.maps.Map(document.getElementById('map'), {\n            zoom: 16,\n            center: myLatLng\n        });\n\n        let marker = new google.maps.Marker({\n            position: myLatLng,\n            map: map,\n            title: 'My Location'\n        });\n    }\n    google.maps.event.addDomListener(window, 'load', initMap);\n\n</script>\n\n</body>\n</html>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/views/reviewPage.ejs b/views/reviewPage.ejs
+--- a/views/reviewPage.ejs	(revision 4fd5d5dea04a351c052f83f9012f668759b28435)
++++ b/views/reviewPage.ejs	(date 1684181773941)
+@@ -78,6 +78,7 @@
+         <h1 style="color: #333333">description</h1>
+         <p> <%= Data.description%></p>
+     </div>
++
+ </div>
+ 
+ <script>
+Index: public/stylesheets/reviewPage.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>body {\n    background: rgb(130, 106, 251);\n    margin: 0;\n    padding: 0;\n}\n\n#container {\n    display: grid;\n    grid-template-columns: 1fr 1fr;\n    grid-gap: 50px;\n    width: 100%;\n    margin: 0 auto;\n    padding: 20px;\n}\n\n#container>div{\n    background-color: #fff;\n    padding: 2%;\n    color: whitesmoke;\n    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);\n}\n\n.head {\n    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);\n    grid-column-start: 1;\n    grid-column-end: 3;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n}\n\n.change-container .change-button {\n    background-color: #4CAF50; /* Green */\n    border: none;\n    color: white;\n    text-align: center;\n    text-decoration: none;\n    display: inline-block;\n    padding: 4px;\n    cursor: pointer;\n}\n\n.change-container #change-label{\n    font-weight: bold;\n}\n\n.image {\n    position: relative;\n    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);\n    height: 300px;\n    grid-row-start: 2;\n    grid-row-end: span 1;\n    grid-column-start: 1;\n    grid-column-end: 1;\n    overflow: hidden;\n    background-position: center;\n    background-repeat: no-repeat;\n    background-size: contain;\n}\n\n.img {\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    min-width: 100%;\n    min-height: 100%;\n    object-fit: contain;\n    max-width: 100vw;\n}\n\n.location {\n    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);\n    height: 500px;\n    grid-row-start: 3;\n    grid-row-end: span 3;\n    grid-column-start: 2;\n    grid-column-end: 3;\n}\n\n.location #map{\n    height: 70%;\n    width: auto;\n    z-index: 100;\n}\n\n.chat {\n    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);\n    display: flex;\n    flex-direction: column;\n    height: 500px;\n    grid-row-start: 3;\n    grid-row-end: span 3;\n    grid-column-start: 1;\n    grid-column-end: 1;\n}\n\n.info {\n    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);\n    display: flex;\n    flex-direction: column;\n    height: 500px;\n    justify-content: center;\n    align-items: center;\n    grid-row-start: 3;\n    grid-row-end: span 3;\n    grid-column-start: 1;\n    grid-column-end: 1;\n    padding: 20px;\n}\n\n.info-container {\n    margin-bottom: 20px;\n}\n\n.chat-info-container {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: space-around;\n    width: 50%;\n    height: 50%;\n}\n\n.input-container {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    width: 100%;\n    margin-bottom: 10px;\n}\n\n.input-container label {\n    flex: 1;\n    text-align: left;\n    margin-right: 10px;\n    font-size: 1.8em;\n}\n\n.input-container input {\n    flex: 2;\n    flex-grow: 1;\n    height: auto;\n}\n\n.button-container {\n    display: flex;\n    justify-content: center;\n    width: 100%;\n}\n\n.button-container button {\n    padding: 10px;\n    background-color: #4CAF50; /* Green */\n    border: none;\n    color: white;\n    text-align: center;\n    text-decoration: none;\n    display: inline-block;\n    font-size: 1.5em;\n    margin: 10px;\n    cursor: pointer;\n    border-radius: 8px;\n}\n\n.description {\n    height: 300px;\n    grid-row-start: 2;\n    grid-row-end: span 1;\n    grid-column-start: 2;\n    grid-column-end: 3;\n}\n\n.description p {\n    font-family: 'Roboto', sans-serif;\n    font-size: 18px;\n    color: black;\n    line-height: 1.6;\n    padding: 15px;\n    text-align: justify;\n}\n\n#form {\n    flex-shrink: 0;\n    background: rgba(0, 0, 0, 0.15);\n    padding: 0.25rem;\n    display: flex;\n    height: 3rem;\n    box-sizing: border-box;\n    backdrop-filter: blur(10px);\n}\n\n#input {\n    border: none;\n    padding: 0 1rem;\n    flex-grow: 1;\n    border-radius: 2rem;\n    margin: 0.25rem;\n}\n\n#input:focus {\n    outline: none;\n}\n\n#form > button {\n    background: #333;\n    border: none;\n    padding: 0 1rem;\n    margin: 0.25rem;\n    border-radius: 3px;\n    outline: none;\n    color: darkgrey;\n}\n\n#messages {\n    list-style-type: none;\n    margin: 0;\n    padding: 0;\n}\n\n#messages > li {\n    padding: 0.5rem 1rem;\n}\n\n#messages > li:nth-child(odd) {\n    background:  rgb(130, 106, 251);\n}\n\n/* For Webkit browsers (e.g. Chrome and Safari) */\n.chat::-webkit-scrollbar {\n    width: 10px;\n}\n\n.chat::-webkit-scrollbar-thumb {\n    background-color: darkgrey;\n    border-radius: 5px;\n}\n\n.chat::-webkit-scrollbar-track {\n    background-color: lightgrey;\n    border-radius: 5px;\n}\n\n/* For Firefox browser */\n.chat {\n    scrollbar-width: thin;\n    scrollbar-color: darkgrey lightgrey;\n}\n\n.messages-container {\n    flex-grow: 1;\n    overflow-y: auto;\n}\n\n/* Responsive Layout */\n@media (max-width: 768px) {\n    #container {\n        grid-template-columns: 1fr;\n        grid-gap: 20px;\n    }\n\n    .head {\n        grid-column: 1 / -1;\n        display: flex;\n        justify-content: space-between;\n        align-items: center;\n        flex-direction: column;\n    }\n\n    .image {\n        grid-row: 2;\n        grid-column: 1 / -1;\n        height: 200px;\n        background-position: center;\n        background-repeat: no-repeat;\n        background-size: cover;\n    }\n\n    .location {\n        grid-row: 3;\n        grid-column: 1 / -1;\n        height: 200px;\n    }\n\n    .description {\n        grid-row: 5;\n        grid-column: 1 / -1;\n        height: 400px;\n    }\n\n    .chat {\n        grid-row: 4;\n        grid-column: 1 / -1;\n        height: 400px;\n    }\n\n    .info {\n        grid-row: 4;\n        grid-column: 1 / -1;\n        height: 400px;\n    }\n\n\n}\n\n\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/public/stylesheets/reviewPage.css b/public/stylesheets/reviewPage.css
+--- a/public/stylesheets/reviewPage.css	(revision 4fd5d5dea04a351c052f83f9012f668759b28435)
++++ b/public/stylesheets/reviewPage.css	(date 1684182196924)
+@@ -15,6 +15,7 @@
+ 
+ #container>div{
+     background-color: #fff;
++    border-radius: 1.6rem;
+     padding: 2%;
+     color: whitesmoke;
+     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+Index: public/stylesheets/addPage.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');\n\n* {\n    font-family: 'Poppins', sans-serif;\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n}\n\nbody {\n    min-height: 100vh;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    padding: 20px;\n    background: rgb(130, 106, 251);\n}\n\n.container {\n    position: relative;\n    max-width: 700px;\n    width: 100%;\n    background: #fff;\n    padding: 25px;\n    border-radius: 8px;\n    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);\n}\n\n.container header {\n    font-size: 1.5rem;\n    color: #333;\n    font-weight: 500;\n    text-align: center;\n}\n\n.container form {\n    margin-top: 30px;\n}\n\n.container button .btn_area{\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100%;\n}\n#btn_pwd{\n    margin-left: 45%;\n    width: 10%;\n    height: auto;\n}\n\n.form .input-box {\n    width: 100%;\n    margin-top: 20px;\n    position: relative; /* Add for putting location icon into input label */\n}\n\n/* Put the location icon in right of input area */\n.input-box img {\n    position: absolute;\n    right: 5px;\n    top: 70%;\n    transform: translateY(-50%);\n}\n\n.input-box img:hover {\n    cursor: pointer;\n}\n\n.input-box label {\n    color: #333;\n}\n\n.form .input-box input {\n    position: relative;\n    height: 50px;\n    width: 100%;\n    outline: none;\n    font-size: 1rem;\n    /*color: #707070;*/\n    margin-top: 8px;\n    border: 1px solid #ddd;\n    border-radius: 6px;\n    padding: 0 15px;\n}\n\n.form .input-box textarea {\n    resize: none;\n    position: relative;\n    /*height: 50px;*/\n    /*width: 100%;*/\n    outline: none;\n    font-size: 1rem;\n    /*color: #707070;*/\n    margin-top: 8px;\n    border: 1px solid #ddd;\n    border-radius: 6px;\n    padding: 0 15px;\n}\n\n.form .input-box .description {\n    width: 100%;\n    height: 100px;\n}\n\n.form .column {\n    display: flex;\n    column-gap: 15px;\n}\n\n.form .input-box input[type=\"file\"] {\n    background-color: transparent;\n    border: none;\n}\n\n#g {\n    background-color: green;\n    color: white;\n}\n\ninput .location img{\n\n}\n\n\n@media screen and (max-width: 500px){\n    .form .column{\n        flex-wrap: wrap;\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/public/stylesheets/addPage.css b/public/stylesheets/addPage.css
+--- a/public/stylesheets/addPage.css	(revision 4fd5d5dea04a351c052f83f9012f668759b28435)
++++ b/public/stylesheets/addPage.css	(date 1684181202230)
+@@ -26,6 +26,21 @@
+     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+ }
+ 
++.container a{
++    text-decoration: none;
++    color: black;
++}
++
++.container a:hover{
++    text-decoration: underline;
++    color: red;
++}
++
++.container a img{
++    width: 1.2rem;
++    height: auto;
++}
++
+ .container header {
+     font-size: 1.5rem;
+     color: #333;
+Index: public/manifest.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n  \"lang\": \"en-uk\",\n  \"name\": \"Bird Sighting all over the world\",\n  \"short_name\": \"Bird sighting\",\n  \"description\": \"A Progressive Web Application about bird sighting\",\n  \"start_url\": \"/\",\n  \"background_color\": \"#2f3d58\",\n  \"theme_color\": \"#2f3d58\",\n  \"orientation\": \"any\",\n  \"display\": \"standalone\",\n  \"icons\": [\n    {\n      \"src\": \"/images/PWA_icon.png\",\n      \"sizes\": \"512x512\"\n    }\n  ]\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/public/manifest.json b/public/manifest.json
+--- a/public/manifest.json	(revision 4fd5d5dea04a351c052f83f9012f668759b28435)
++++ b/public/manifest.json	(date 1684162561917)
+@@ -10,7 +10,7 @@
+   "display": "standalone",
+   "icons": [
+     {
+-      "src": "/images/PWA_icon.png",
++      "src": "../images/maskable_icon_x512.png",
+       "sizes": "512x512"
+     }
+   ]
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"6ceddceb-9596-4663-81d0-6480726aea63\" name=\"Changes\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/public/stylesheets/addPage.css\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/public/stylesheets/addPage.css\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/public/sw.js\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/public/sw.js\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/public/views/listPage.ejs\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/public/views/listPage_header.ejs\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/views/addPage.ejs\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/views/addPage.ejs\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/views/listPage.ejs\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/views/listPage.ejs\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"MarkdownSettingsMigration\">\n    <option name=\"stateVersion\" value=\"1\" />\n  </component>\n  <component name=\"ProjectId\" id=\"2PngdPPSgy2dm3hlWEYsUxxzYao\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"WebServerToolWindowFactoryState\": \"false\",\n    \"last_opened_file_path\": \"/Users/eugenechan/Desktop/birdwatching_assignment\",\n    \"node.js.detected.package.eslint\": \"true\",\n    \"node.js.detected.package.tslint\": \"true\",\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\n    \"nodejs_package_manager_path\": \"npm\",\n    \"vue.rearranger.settings.migration\": \"true\"\n  }\n}]]></component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"6ceddceb-9596-4663-81d0-6480726aea63\" name=\"Changes\" comment=\"\" />\n      <created>1684098346120</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1684098346120</updated>\n      <workItem from=\"1684098347482\" duration=\"8109000\" />\n    </task>\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 4fd5d5dea04a351c052f83f9012f668759b28435)
++++ b/.idea/workspace.xml	(date 1684182198354)
+@@ -4,12 +4,15 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="6ceddceb-9596-4663-81d0-6480726aea63" name="Changes" comment="">
++    <list default="true" id="6ceddceb-9596-4663-81d0-6480726aea63" name="Changes" comment="App shell applied to improve list page performance;&#10;Modified the add page to hide the upload information form after a successful submission and to display the success message and password, and returns the list page;&#10;Optimised layout of addPage.">
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/public/stylesheets/addPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/addPage.css" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/public/stylesheets/reviewPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/reviewPage.css" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/public/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/sw.js" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/public/views/listPage.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/listPage_header.ejs" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/views/addPage.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/addPage.ejs" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/views/listPage.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/listPage.ejs" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/views/reviewPage.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/reviewPage.ejs" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -27,20 +30,20 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "WebServerToolWindowFactoryState": "false",
+-    "last_opened_file_path": "/Users/eugenechan/Desktop/birdwatching_assignment",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
++    &quot;last_opened_file_path&quot;: &quot;/Users/eugenechan/Desktop/birdwatching_assignment&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+@@ -49,11 +52,35 @@
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+       <updated>1684098346120</updated>
+-      <workItem from="1684098347482" duration="8109000" />
++      <workItem from="1684098347482" duration="14882000" />
++      <workItem from="1684164506380" duration="4550000" />
++    </task>
++    <task id="LOCAL-00001" summary="App shell applied to improve list page performance;&#10;Modified the add page to hide the upload information form after a successful submission and to display the success message and password, and returns the list page;&#10;Optimised layout of addPage.">
++      <created>1684106774188</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1684106774188</updated>
+     </task>
++    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
++    </option>
++  </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="App shell applied to improve list page performance;&#10;Modified the add page to hide the upload information form after a successful submission and to display the success message and password, and returns the list page;&#10;Optimised layout of addPage." />
++    <option name="LAST_COMMIT_MESSAGE" value="App shell applied to improve list page performance;&#10;Modified the add page to hide the upload information form after a successful submission and to display the success message and password, and returns the list page;&#10;Optimised layout of addPage." />
++  </component>
+ </project>
+\ No newline at end of file
