@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel='stylesheet' href='/stylesheets/addPage.css' />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/javascripts/indexDB.js"></script>
 </head>
 <body>
     <div class="container" id="addPage" style="display: block">
@@ -124,8 +125,13 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    // 在表格中显示感谢提交表单的信息
+                    // 在表格中显示感谢提交表单的信息*
                     switchContent('password');
+                    // indexDB 调用示例
+                    var inputData = {"date":this.data.get("date")+" "+this.data.get("time"),"identification":this.data.get("identification"),
+                        "location":this.data.get("location"), "user":this.data.get("user"),"description":this.data.get("description"),
+                        "img":this.data.get("myImg"),"password":response.password}
+                    addData("sighting",inputData)
                 }
             });
         }
