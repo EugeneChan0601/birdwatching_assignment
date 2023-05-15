@@ -24,7 +24,8 @@ exports.create = function (req, res) {
         console.log("Sighting saved!    "+sighting)
         //res.json({sighting: sighting});
         console.log("Sighting saved successful, your password is " + pwd);
-        res.json({password: pwd});
+        //res.status(204).json({Password: pwd});
+        res.send({Password: pwd});
     });
 };
 
@@ -35,6 +36,7 @@ exports.queryAll = function(req, res) {
         }
 
         console.log("query data success");
+        console.log(data);
         res.render('listPage', { title: 'Express', Data: data});
 
     });
@@ -45,26 +47,53 @@ exports.pwdValidation = function (inputID, inputPwd){
 }
 
 exports.updateSighting = function (req,res) {
-    var conditions = {"id" : req.body.id}
+    // var conditions = {"id" : req.body.id}
     var updates = {$set:{
-        "date": req.body.date,
         "identification": req.body.identification,
-        "location": req.body.location,
-        "description": req.body.description,
     }}
-    Sighting.updateOne(conditions,updates,function (error) {
-        if(error) {
-            console.log(error)
-        } else {
-            console.log("Sighting edited.")
-        }
-    })
+    //
+    // Sighting.updateOne(conditions,updates,function (error) {
+    //     if(error) {
+    //         console.log(error)
+    //     } else {
+    //         console.log("Sighting edited.")
+    //     }
+    // });
+
+    console.log(req.body.id);
+    console.log(req.body.password);
+    console.log(req.body.identification);
+
+    Sighting.findOne({"id" : req.body.id}, {"password": 1},
+        function (error, result) {
+            if(error){
+                console.log("can not find sight record")
+            }
+            else{
+                console.log(result.password);
+                if(result.password == req.body.password){
+                    Sighting.updateOne({"id" : req.body.id}, updates,function (error) {
+                        if(error) {
+                            console.log(error)
+                        } else {
+                            console.log("Sighting edited.")
+                        }
+                    });
+
+                    res.send("update success")
+                }
+                else{
+                    res.send("update failed, please check your password")
+                }
+            }
+        });
+
 }
 
 exports.querySighting = function (req, res) {
     //var sightID = req.id;
     var sightID = Number(req.body.index);
-    Sighting.findOne({"id" : sightID}, {"date": 1, "identification": 1, "location": 1,
+    Sighting.findOne({"id" : sightID}, {"id": 1,"date": 1, "identification": 1, "location": 1,
                                         "description": 1, "img": 1},
                                         function (error, result) {
                                             if(error){

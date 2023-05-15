@@ -32,7 +32,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/addPage', function (req, res) {
-  res.render('addPage');
+  res.render('addPage', {Password: ''});
 });
 
 router.post('/reviewPage', function (req, res) {
@@ -45,6 +45,10 @@ router.post('/create', upload.single('myImg'), function (req, res){
 
 })
 
+router.post('/updateSighting', function (req, res){
+  console.log("req" + req.body);
+  sighting.updateSighting(req, res);
+})
 
 
 module.exports = router;

@@ -8,6 +8,8 @@
     <script src="/javascripts/script.js"></script>
     <link rel="manifest" href="/manifest.json">
     <script src="/javascripts/jump.js"></script>
+    <script src="/javascripts/indexDB.js"></script>
+
 </head>
 <body>
     <main class="table">
@@ -47,4 +49,9 @@
         navigator.serviceWorker.register('/sw.js', { scope: '/' });
     }
 </script>
+
+<script>
+    openDB("helloIndexDB", 1);
+</script>
+
 </html>
