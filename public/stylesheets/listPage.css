@@ -151,6 +151,43 @@ thead th{
     top: 0;
     left: 0;
     background-color: #d5d1defe;
+    cursor: pointer;
+}
+
+thead th span.icon-arrow {
+    display: inline-block;
+    width: 1.3rem;
+    height: 1.3rem;
+    /*color: #6c00bd;*/
+    border: 1.4px solid transparent;
+    border-radius: 50%;
+
+    text-align: center;
+    font-size: 1rem;
+
+    margin-left: .5rem;
+    transition: .2s ease-in-out;
+}
+
+thead th:hover span.icon-arrow {
+    border: 1.4px solid #6c00bd;
+}
+
+thead th:hover {
+    color: #6c00bd;
+}
+
+thead th.active span.icon-arrow {
+    background-color: #6c00bd;
+    color: #fff;
+}
+
+thead th.asc span.icon-arrow {
+    transform: rotate(180deg);
+}
+
+thead th.active, tbody td.active{
+    color: #6c00bd;
 }
 
 tbody tr:nth-child(even){

@@ -30,13 +30,13 @@
 
             <div class="column">
                 <div class="input-box">
-                    <label>Date</label>
-                    <input name="date" id="date" type="text" placeholder="YYYY-MM-DD" required>
+                    <label for="date">Date</label>
+                    <input name="date" id="date" type="date" required>
                 </div>
 
                 <div class="input-box">
-                    <label>Time</label>
-                    <input name="time" id="time" type="text" placeholder="hh:mm" required>
+                    <label for="time">Time</label>
+                    <input name="time" id="time" type="time" required>
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
 
     <div id="password" class="container" style="display:none;">
         <div class="pwd_content">
-            <p><b>Improtant!</b><br>Your password: <b style="color: red">12341234</b></p>
+            <p><b>Improtant!</b><br>Your password: <b id="pwdPosition" style="color: red">12341234</b></p>
         </div>
         <div class="btn_area">
             <button id="btn_pwd" onclick="location.href='/'">Exit</button>
