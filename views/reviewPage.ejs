@@ -13,6 +13,7 @@
             src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/javascripts/indexDB.js"></script>
 
 </head>
 <body>
@@ -36,6 +37,7 @@
     </div>
 
     <div id="sightingID" hidden> <%= Data.id %> </div>
+    <div id="roomNum" hidden> <%= Data.password %> </div>
 
     <div class="image">
         <img src="<%= Data.img.replace('public', '') %>"
@@ -129,6 +131,21 @@
             item.append(': ' + data.message);
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
+            let room_num = document.getElementById("roomNum").innerHTML
+            let chatData = JSON.stringify({"room_num":room_num,"user":data.name,"text":data.message})
+            let chatDataForIndex = {"room_num":room_num,"user":data.name,"text":data.message}
+            addData("chat",chatDataForIndex)
+            $.ajax({
+                url: '/saveChat',
+                type: 'post',
+                data: chatData,
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                success: function() {
+                    alert(response);
+                }
+            });
+
         });
 
         socket.on('broadcast',function(data){

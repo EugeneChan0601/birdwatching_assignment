@@ -5,6 +5,7 @@ const manifest = require('manifest.json');
 
 
 var sighting = require('../controllers/sighting');
+var chatroom = require('../controllers/chatroom');
 
 
 var multer = require('multer');
@@ -49,6 +50,10 @@ router.post('/create', upload.single('myImg'), function (req, res){
 router.post('/updateSighting', function (req, res){
   console.log("req" + req.body);
   sighting.updateSighting(req, res);
+})
+
+router.post('/saveChat', function (req, res){
+  chatroom.create(req, res);
 })
 
 

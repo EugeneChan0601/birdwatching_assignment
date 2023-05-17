@@ -94,7 +94,7 @@ exports.querySighting = function (req, res) {
     //var sightID = req.id;
     var sightID = Number(req.body.index);
     Sighting.findOne({"id" : sightID}, {"id": 1,"date": 1, "identification": 1, "location": 1,
-                                        "description": 1, "img": 1},
+                                        "description": 1, "img": 1, "password":1},
                                         function (error, result) {
                                             if(error){
                                                 console.log("query sighting error")
