@@ -13,7 +13,7 @@ var database = require('../database/sighting')
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3002');
 app.set('port', port);
 
 /**
@@ -101,8 +101,6 @@ io.on('connection', (socket) => {
   clients++;
   io.sockets.emit("welcome", {description: "Hello and Welcome to talk the bird"});
 
-  io.sockets.emit('broadcast',{description: 'Now have '+ clients + ' clients in the chat room'});
-
   socket.on('disconnect', () => {
     console.log('user disconnected');
     clients--;
@@ -110,9 +108,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('chat message', data => {
-    io.emit('chat message', data); // 保持数据对象的结构
+    io.emit('chat message', data); // Maintaining the structure of data objects
     console.log('chat message', socket.id + data.name + ': ' + data.message);
   });
-
-
 });

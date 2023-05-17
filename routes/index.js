@@ -3,6 +3,7 @@ var router = express.Router();
 var bodyParser = require("body-parser");
 const manifest = require('manifest.json');
 
+
 var sighting = require('../controllers/sighting');
 
 
@@ -49,6 +50,40 @@ router.post('/updateSighting', function (req, res){
   console.log("req" + req.body);
   sighting.updateSighting(req, res);
 })
+
+
+// This is a module for DBPedia, and get the name from data.identification in reviewPage.ejs
+router.get('/dbpedia/:identifier', function(req, res, next) {
+  // The DBpedia resource to retrieve data from
+  const resource = 'http://dbpedia.org/resource/' + req.params.identifier;
+
+  // The DBpedia SPARQL endpoint URL
+  const endpointUrl = 'https://dbpedia.org/sparql';
+
+  // The SPARQL query to retrieve data for the given resource
+  const sparqlQuery = 'SELECT ?description WHERE { <' + resource + '> dbo:abstract ?description . FILTER (langMatches(lang(?description), "EN")) }';
+
+  // Encode the query as a URL parameter
+  const encodedQuery = encodeURIComponent(sparqlQuery);
+
+  // Build the URL for the SPARQL query
+  const url = `${endpointUrl}?query=${encodedQuery}&format=json`;
+
+  // Use fetch to retrieve the data
+  fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        // The results are in the 'data' object
+        var bindings = data.results.bindings;
+        if (bindings.length > 0) {
+          res.send(bindings[0].description.value);
+        } else {
+          res.send('No data returned from SPARQL query');
+        }
+      });
+});
+
+
 
 
 module.exports = router;

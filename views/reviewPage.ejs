@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="/javascripts/info.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script async
             src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
     </script>
@@ -37,13 +38,12 @@
     <div id="sightingID" hidden> <%= Data.id %> </div>
 
     <div class="image">
-<!--        <img src = <%= Data.img.replace('public\\', '')%>>-->
-<!--            width="500" height="300" >-->
-        <img src = images/crow1.jpg width="500" height="300">
+        <img src="<%= Data.img.replace('public', '') %>"
+         width="500" height="300" >
     </div>
 
     <div class="location">
-        <h1 style="color: #333333"> Location: <%= Data.location%> </h1>
+        <h1 style="color: #333333"> <%= Data.location%> </h1>
         <div id="map"></div>
     </div>
 
@@ -84,24 +84,30 @@
     <div class="description">
         <h1 style="color: #333333">description</h1>
         <p> <%= Data.description%></p>
+        <p id="DB-des" style="color: #333333"></p>
+        <p id="address" style="color: #333333"></p>
     </div>
 
 </div>
 
 <script>
 
+    // Initial SocketIO
     setupSocketIO();
 
     function setupSocketIO() {
-        let name = localStorage.getItem('username');
 
         var socket = io();
+        // get the form and content from input
         var form = document.getElementById('form');
         var input = document.getElementById('input');
 
+        // add listener
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             if (input.value) {
+                // get name from sessionStorage
+                let name = sessionStorage.getItem('username');
                 socket.emit('chat message', { name: name, message: input.value });
                 input.value = '';
             }
@@ -112,10 +118,15 @@
 
         });
 
+        // output the message from user
         socket.on('chat message', function(data) {
             var item = document.createElement('li');
-            // Change to logic based on the username of the message sender
-            item.textContent = (data.name === name ? 'Me' : data.name) + ': ' + data.message;
+            var nameSpan = document.createElement('span');
+            let name = sessionStorage.getItem('username');
+            nameSpan.textContent = data.name === name ? name : data.name;
+            nameSpan.className = data.name === name ? 'user-name' : '';
+            item.appendChild(nameSpan);
+            item.append(': ' + data.message);
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });
@@ -124,14 +135,12 @@
             document.getElementById('status').innerHTML = data.description;
         });
     }
+
 </script>
 
 <script>
     function initMap() {
-        let location = '<%= Data.location%>';
-        let [lat, lng] = location.split(",");
-        console.log(lat, lng);
-        let myLatLng = {lat: parseFloat(lat), lng: parseFloat(lng)};
+        let myLatLng = {lat: 53.3748336, lng: -1.4774189};
 
         let map = new google.maps.Map(document.getElementById('map'), {
             zoom: 16,
@@ -144,7 +153,7 @@
             title: 'My Location'
         });
     }
-    google.maps.event.addDomListener(window, 'load', initMap());
+    google.maps.event.addDomListener(window, 'load', initMap);
 
 </script>
 
@@ -164,13 +173,23 @@
             processData: false,
             success: function(response) {
                 alert(response);
-
             }
         });
-
     }
-
 </script>
+
+
+<script>
+    // get the content from the DBPedia, and display on the DIV of description.
+    $(document).ready(function(){
+        var identifier = '<%= Data.identification %>';
+        $.get('/dbpedia/' + identifier, function(data) {
+            $('#DB-des').text('Descrption from DBpedia: ' + data);
+            $('#address').html('<a href="http://dbpedia.org/resource/' + identifier + '">Read more on DBPedia</a>');
+        });
+    });
+</script>
+
 
 </body>
 </html>

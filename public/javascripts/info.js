@@ -32,8 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
             // If no name is entered, it will prompt that a name needs to be entered
             if (nameInput.value === null || nameInput.value.trim() === '') {
                 alert('Please enter your name to continue');
+            } else if (isUploader.value === null || isUploader.value.trim() === '') {
+                sessionStorage.setItem('username', nameInput.value);
+                toggleDivs();
             } else {
-                localStorage.setItem('username', nameInput.value);
+                sessionStorage.setItem('username', nameInput.value);
                 toggleDivs();
                 changeDiv.style.display = 'block';
             }
