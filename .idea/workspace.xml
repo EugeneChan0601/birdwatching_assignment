@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6ceddceb-9596-4663-81d0-6480726aea63" name="Changes" comment="Optimized the interaction between add page and review page;&#10;Optimized the cache when offline work.">
+    <list default="true" id="6ceddceb-9596-4663-81d0-6480726aea63" name="Changes" comment="Apply sorted function to date, user and id, still test the sorted for location.&#10;Still testing on manifest.json to let it display the correct icon.&#10;Testing the location function.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/maskable_icon_x512.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/javascripts/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/javascripts/script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/stylesheets/listPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/stylesheets/listPage.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/views/table_header.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/table_header.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/addPage.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/addPage.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/listPage.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/listPage.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/reviewPage.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/reviewPage.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +57,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684190807989</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Apply sorted function to date, user and id, still test the sorted for location.&#10;Still testing on manifest.json to let it display the correct icon.&#10;Testing the location function.">
+      <created>1684274558810</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1684274558810</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -70,6 +72,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Optimized the interaction between add page and review page;&#10;Optimized the cache when offline work." />
-    <option name="LAST_COMMIT_MESSAGE" value="Optimized the interaction between add page and review page;&#10;Optimized the cache when offline work." />
+    <MESSAGE value="Apply sorted function to date, user and id, still test the sorted for location.&#10;Still testing on manifest.json to let it display the correct icon.&#10;Testing the location function." />
+    <option name="LAST_COMMIT_MESSAGE" value="Apply sorted function to date, user and id, still test the sorted for location.&#10;Still testing on manifest.json to let it display the correct icon.&#10;Testing the location function." />
   </component>
 </project>

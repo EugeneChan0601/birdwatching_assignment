@@ -90,8 +90,10 @@
 
         function showPosition(position)
         {
-            x.value="Latitude: " + position.coords.latitude +
-                ", Longitude: " + position.coords.longitude;
+            // x.value="Latitude: " + position.coords.latitude +
+            //     ", Longitude: " + position.coords.longitude;
+            x.value=position.coords.latitude +
+                "," + position.coords.longitude;
         }
     </script>
     <script>
