@@ -38,6 +38,7 @@ body {
 }
 
 .exit_link button{
+    background-color: #4CAF50;
     width: 5rem;
     height: 2rem;
     color: black;
@@ -50,15 +51,21 @@ body {
     color: black;
 }
 
-.change-container .change-button {
-    background-color: #4CAF50; /* Green */
+.change-container #change-button {
+    background-color: #4CAF50;
     border: none;
-    color: white;
     text-align: center;
-    text-decoration: none;
     display: inline-block;
     padding: 4px;
     cursor: pointer;
+    color: black;
+    border-radius: 8px;
+}
+
+.change-container #change-button:hover {
+    cursor: pointer;
+    background-color: rgba(255,255,255,0.3);
+    color: black;
 }
 
 .change-container #change-label{
@@ -114,7 +121,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 500px;
-    max-width: 590px;
+    max-width: 670px;
     overflow-x: auto;
     grid-row-start: 3;
     grid-row-end: span 3;

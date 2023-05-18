@@ -28,7 +28,7 @@
             <div class="change-container">
                 <label id="change-label" style="color:#333333;">Type:</label>
                 <input id="type-name">
-                <button class="change-button" onclick="updateIdentification()">Change</button>
+                <button id="change-button" onclick="updateIdentification()">Change</button>
             </div>
         </div>
         <div class="exit_link">
@@ -84,9 +84,11 @@
     </div>
 
     <div class="description">
-        <h1 style="color: #333333">description</h1>
-        <p> <%= Data.description%></p>
-        <p id="DB-des" style="color: #333333"></p>
+        <h1 style="color: #333333">Description</h1>
+        <p>Description from User:</p>
+        <p style="font-family: 'Bodoni 72 Oldstyle';"><%= Data.description%></p>
+        <p>Description from DBPedia:</p>
+        <p id="DB-des" style="font-family: 'Bodoni 72 Oldstyle';"></p>
         <p id="address" style="color: #333333"></p>
     </div>
 
@@ -222,7 +224,7 @@
         // This is a test
         var identifier = '<%= Data.identification %>';
         $.get('/dbpedia/' + identifier, function(data) {
-            $('#DB-des').text('Descrption from DBpedia: ' + data);
+            $('#DB-des').text(data);
             $('#address').html('<a href="http://dbpedia.org/resource/' + identifier + '">Read more on DBPedia</a>');
         });
     });
