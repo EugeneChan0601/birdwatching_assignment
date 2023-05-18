@@ -117,7 +117,29 @@
 
         socket.on('welcome',function(data){
             document.getElementById('Welcome').innerHTML = data.description;
-
+            let historyData = JSON.stringify({"room_num":document.getElementById("roomNum").innerHTML})
+            $.ajax({
+                url: '/readChat',
+                type: 'post',
+                data: historyData,
+                contentType: "application/json; charset=utf-8",
+                processData: false,
+                success: function(response) {
+                    console.log(response)
+                    response.forEach(function (item,index,self){
+                        console.log(item.text)
+                        var historyItem = document.createElement('li');
+                        var nameSpan = document.createElement('span');
+                        let name = item.user
+                        nameSpan.textContent = item.user === name ? name : item.user;
+                        nameSpan.className = item.user === name ? 'user-name' : '';
+                        historyItem.appendChild(nameSpan);
+                        historyItem.append(': ' + item.text);
+                        messages.appendChild(historyItem);
+                        window.scrollTo(0, document.body.scrollHeight);
+                    })
+                }
+            });
         });
 
         // output the message from user
@@ -141,7 +163,7 @@
                 data: chatData,
                 contentType: "application/json; charset=utf-8",
                 processData: false,
-                success: function() {
+                success: function(response) {
                     alert(response);
                 }
             });

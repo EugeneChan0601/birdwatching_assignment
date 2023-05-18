@@ -56,6 +56,10 @@ router.post('/saveChat', function (req, res){
   chatroom.create(req, res);
 })
 
+router.post('/readChat', function (req, res){
+  chatroom.queryChatroom(req, res);
+})
+
 
 // This is a module for DBPedia, and get the name from data.identification in reviewPage.ejs
 router.get('/dbpedia/:identifier', function(req, res, next) {

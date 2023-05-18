@@ -6,7 +6,7 @@ var ChatroomSchema = new Schema(
     {
         id: {type: Number},
         user: {type: String},
-        room_num: {type: Number,required: true},
+        room_num: {type: String,required: true},
         text: {type: String}
     }
 );

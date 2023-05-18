@@ -31,7 +31,8 @@ exports.create = function (req, res) {
 // }
 
 exports.queryChatroom = function (req, res) {
-    Chatroom.find({"room_num" : req.room_num}, {"user":1,"text":1},function (error, result) {
+    var room_num = String(req.body.room_num);
+    Chatroom.find({"room_num" :room_num}, {"user":1,"text":1},function (error, result) {
         if(error){
             console.log(error)
         }
