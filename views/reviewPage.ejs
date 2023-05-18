@@ -194,11 +194,10 @@
         });
     }
 </script>
-
-
 <script>
     // get the content from the DBPedia, and display on the DIV of description.
     $(document).ready(function(){
+        // This is a test
         var identifier = '<%= Data.identification %>';
         $.get('/dbpedia/' + identifier, function(data) {
             $('#DB-des').text('Descrption from DBpedia: ' + data);
