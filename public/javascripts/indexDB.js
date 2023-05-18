@@ -186,6 +186,26 @@ function getAllData(storeName) {
     }
 }
 
+function getAllDataByIndex(storeName, indexName, indexValue) {
+    var db
+    var request = indexedDB.open("helloIndexDB",1)
+    request.onsuccess = function () {
+        db = request.result
+        let list = [];
+        var store = db.transaction(storeName, "readwrite").objectStore(storeName);
+        var requestGet = store.index(indexName).openCursor(IDBKeyRange.only(indexValue));
+        requestGet.onsuccess = function (e) {
+            var cursor = e.target.result;
+            if (cursor) {
+                list.push(cursor.value);
+                cursor.continue();
+            } else {
+                console.log("Data: ", list);
+            }
+        };
+    }
+}
+
 // function updateDB(db, storeName, data) {
 //     var request = db
 //         .transaction([storeName], "readwrite")

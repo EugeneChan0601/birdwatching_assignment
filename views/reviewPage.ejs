@@ -119,6 +119,11 @@
 
         socket.on('welcome',function(data){
             document.getElementById('Welcome').innerHTML = data.description;
+
+            //Get chat history using index DB
+            //getAllDataByIndex("chat","room_num",document.getElementById("roomNum").innerHTML)
+
+            //Get chat history using mongo
             let historyData = JSON.stringify({"room_num":document.getElementById("roomNum").innerHTML})
             $.ajax({
                 url: '/readChat',
@@ -127,9 +132,7 @@
                 contentType: "application/json; charset=utf-8",
                 processData: false,
                 success: function(response) {
-                    console.log(response)
                     response.forEach(function (item,index,self){
-                        console.log(item.text)
                         var historyItem = document.createElement('li');
                         var nameSpan = document.createElement('span');
                         let name = item.user
