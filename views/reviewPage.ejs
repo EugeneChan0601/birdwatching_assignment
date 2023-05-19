@@ -9,9 +9,7 @@
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="/javascripts/info.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script async
-            src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap">
-    </script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD67e55wmYhnHd9bA02_Xt1D0ibG6BKmv4&callback=initMap"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/javascripts/indexDB.js"></script>
 
@@ -45,7 +43,7 @@
     </div>
 
     <div class="location">
-        <h1 style="color: #333333"> <%= Data.location%> </h1>
+        <h1 style="color: #333333">Location: <%= Data.location%> </h1>
         <div id="map"></div>
     </div>
 
@@ -184,7 +182,11 @@
 
 <script>
     function initMap() {
-        let myLatLng = {lat: 53.3748336, lng: -1.4774189};
+        let location = '<%= Data.location%>';
+        let [lat, lng] = location.split(",");
+        console.log(lat, lng);
+        let myLatLng = {lat: parseFloat(lat), lng: parseFloat(lng)};
+        console.log(myLatLng);
 
         let map = new google.maps.Map(document.getElementById('map'), {
             zoom: 16,
@@ -197,7 +199,7 @@
             title: 'My Location'
         });
     }
-    google.maps.event.addDomListener(window, 'load', initMap);
+    google.maps.event.addDomListener(window, 'load', initMap());
 
 </script>
 
@@ -224,7 +226,6 @@
 <script>
     // get the content from the DBPedia, and display on the DIV of description.
     $(document).ready(function(){
-        // This is a test
         var identifier = '<%= Data.identification %>';
         $.get('/dbpedia/' + identifier, function(data) {
             $('#DB-des').text(data);
